@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
+
+
 public class GameField extends JPanel {
     private final int SIZE = 320;
     private final int DOT_SIZE = 16;
@@ -26,6 +28,8 @@ public class GameField extends JPanel {
         setBackground(Color.black);
         loadImages();
         initGame();
+        addKeyListener(new FieldKeyListener());
+        setFocusable(true);
     }
     public void initGame(){
         dots = 3;
@@ -57,6 +61,12 @@ public class GameField extends JPanel {
             for (int i = 0; i < dots; i++) {
                 g.drawImage(dot,x[i],y[i],this);
             }
+        }else{
+            String str = "Game Over";
+            //Font f = new Font("Arial",14,Font.BOLD);
+            g.setColor(Color.white);
+            // g.setFont(f);
+            g.drawString(str,125,SIZE/2);
         }
     }
 
@@ -114,5 +124,33 @@ public class GameField extends JPanel {
 
         }
         repaint();
+    }
+    class FieldKeyListener extends KeyAdapter{
+        @Override
+        public void keyPressed(KeyEvent e) {
+            super.keyPressed(e);
+            int key = e.getKeyCode();
+            if(key == KeyEvent.VK_LEFT && !right){
+                left = true;
+                up = false;
+                down = false;
+            }
+            if(key == KeyEvent.VK_RIGHT && !left){
+                right = true;
+                up = false;
+                down = false;
+            }
+
+            if(key == KeyEvent.VK_UP && !down){
+                right = false;
+                up = true;
+                left = false;
+            }
+            if(key == KeyEvent.VK_DOWN && !up){
+                right = false;
+                down = true;
+                left = false;
+            }
+        }
     }
 }
